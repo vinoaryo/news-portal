@@ -8,12 +8,12 @@ export default function Homepage(props) {
     return (
         <div className='min-h-screen bg-neutral-800'>
             <Head title={props.title} />
-            <Navbar />
+            <Navbar user={props.auth.user}/>
             <div className="flex justify-center flex-col lg:flex-row lg:flex-wrap lg:items-stretch items-center gap-4 p-4">
                 <NewsList news={props.news.data}/>
             </div>
             <div className="flex justify-center items-center">
-                <Paginator />
+                <Paginator meta={props.news.meta}/>
             </div>
         </div>
     )
