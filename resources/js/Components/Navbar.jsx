@@ -1,4 +1,6 @@
-const Navbar = () => {
+import { Link } from '@inertiajs/inertia-react';
+
+const Navbar = ({ user }) => {
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
@@ -13,27 +15,54 @@ const Navbar = () => {
                     />
                 </div>
                 <div className="dropdown dropdown-end">
-                    <label tabindex="0" className="btn btn-ghost btn-circle avatar">
+                    <label
+                        tabIndex="0"
+                        className="btn btn-ghost btn-circle avatar"
+                    >
                         <div className="w-10 rounded-full">
                             <img src="https://placeimg.com/80/80/people" />
                         </div>
                     </label>
                     <ul
-                        tabindex="0"
+                        tabIndex="0"
                         className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
                     >
-                        <li>
-                            <a className="justify-between">
-                                Dashboard
+                        {!user ? (
+                            <>
+                                <li>
+                                    <Link href={route('login')} as="button">Login</Link>
+                                </li>
+                                <li>
+                                    <Link href={route('register')} as="button">Register</Link>
+                                </li>
+                            </>
+                        ) : (
+                            <>
+                                <li>
+                                    <Link className="justify-between" href={route('dashboard')} as="button">
+                                        Dashboards
+                                        <span className="badge">New</span>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link href={route('login')} as="button">Settings</Link>
+                                </li>
+                                <li>
+                                    <Link href={route('logout')} as="button" method='post'>Logout</Link>
+                                </li>
+                            </>
+                        )}
+
+                        {/* <a className="justify-between">
+                                Profile
                                 <span className="badge">New</span>
                             </a>
-                        </li>
                         <li>
                             <a>Settings</a>
                         </li>
                         <li>
                             <a>Logout</a>
-                        </li>
+                        </li> */}
                     </ul>
                 </div>
             </div>
