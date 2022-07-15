@@ -1,5 +1,7 @@
 const isNews = (news) => {
     return news.map((data, i) => {
+        const authorName = data.author.split('@')[0]
+        
         return <div key={i} className="card w-96 bg-base-100 shadow-xl">
                 <figure>
                     <img src="https://placeimg.com/400/225/arch" alt="Shoes" />
@@ -12,7 +14,7 @@ const isNews = (news) => {
                     <p>{data.description}</p>
                     <div className="card-actions justify-end">
                         <div className="badge badge-inline">{data.category}</div>
-                        <div className="badge badge-outline">{data.author}</div>
+                        <div className="badge badge-outline">{authorName}</div>
                     </div>
                 </div>
             </div>

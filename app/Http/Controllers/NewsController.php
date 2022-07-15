@@ -17,7 +17,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news =  new NewsCollection(News::paginate(8));
+        $news =  new NewsCollection(News::OrderByDesc('id')->paginate(8));
         // dd($news);
         return Inertia::render('Homepage', [
             'title' => 'VNews',
@@ -45,7 +45,14 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $news = new News();
+        $news->title = $request->title;          
+        $news->description = $request->description;          
+        $news->category = $request->category;          
+        $news->author = auth()->user()->email;  
+        $news->save();
+
+        return redirect()->back()->with('success', 'News added successfully');
     }
 
     /**
@@ -56,7 +63,11 @@ class NewsController extends Controller
      */
     public function show(News $news)
     {
-        //
+        $myNews = $news::where('author', auth()->user()->email)->get();
+        return Inertia::render('Dashboard', [
+            'myNews' => $myNews,
+        ]);
+        
     }
 
     /**
@@ -65,9 +76,11 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function edit(News $news)
+    public function edit(News $news, Request $request)
     {
-        //
+        return Inertia::render('EditNews', [
+            'myNews' => $news->find($request->id)
+        ]);
     }
 
     /**
@@ -79,7 +92,13 @@ class NewsController extends Controller
      */
     public function update(Request $request, News $news)
     {
-        //
+        News::where('id', $request->id)->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,
+        ]);
+
+        return to_route('dashboard')->with('success', 'Succesfully updated news');
     }
 
     /**
@@ -88,8 +107,10 @@ class NewsController extends Controller
      * @param  \App\Models\News  $news
      * @return \Illuminate\Http\Response
      */
-    public function destroy(News $news)
+    public function destroy(Request $request, News $news, )
     {
-        //
+        $news = News::find($request->id);
+        $news->delete();
+        return redirect()->back()->with('success', 'News deleted successfully');
     }
 }
